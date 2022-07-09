@@ -1,15 +1,28 @@
 from collections import namedtuple
+from enum import Enum, auto
+from random import shuffle
 from threading import Thread
 from typing import List
 from queue import SimpleQueue
 
+class Role(Enum):
+    THE_CROWN = auto()
+    DEMON_LORD = auto()
+    USURPER = auto()
+    KNIGHT = auto()
+    CULTIST = auto()
+
 class Player:
+    role: Role
     sender: SimpleQueue
     receiver: SimpleQueue
 
     def __init__(self, receiver):
         self.sender = SimpleQueue()
         self.receiver = receiver
+
+    def send_event(self, event):
+        self.sender.put(event)
 
     def receive_event(self):
         return self.receiver.get()
@@ -34,7 +47,13 @@ class Game:
         return player.sender
 
     def run(self):
-        pass
+        self.assign_player_roles()
+
+    def assign_player_roles(self):
+        roles = list(Role)
+        shuffle(roles)
+        for player in self.players:
+            player.role = roles.pop()
 
     @property
     def is_full(self):
