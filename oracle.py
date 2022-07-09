@@ -1,14 +1,43 @@
-from flask import Flask, redirect, render_template, url_for
+from collections import namedtuple
+from threading import Thread
+from typing import List
+from queue import SimpleQueue
 
-# Create our Flask application.
-app = Flask(__name__)
+class Player:
+    sender: SimpleQueue
+    receiver: SimpleQueue
 
-@app.route('/game')
-def get_game():
-    # Respond with the page.
-    return render_template('game.html')
+    def __init__(self, receiver):
+        self.sender = SimpleQueue()
+        self.receiver = receiver
 
-@app.route('/')
-def redirect_to_game():
-    # Since, for now, there is only one page, redirect there.
-    return redirect(url_for('get_game'))
+    def receive_event(self):
+        return self.receiver.get()
+
+class Game:
+    players: List[Player]
+
+    def __init__(self):
+        self.players = list()
+
+    def add_player_from_sender(self, sender):
+        # What the caller considers a sender is, to us, a receiver.
+        receiver = sender
+        if self.is_full:
+            raise Exception('Tried to add a player to an ongoing game')
+        player = Player(receiver)
+        self.players.append(player)
+        # Start the game once five players have joined
+        if self.is_full:
+            Thread(target=Game.run, args=(self,)).start()
+        # Give the caller a way of receiving events.
+        return player.sender
+
+    def run(self):
+        pass
+
+    @property
+    def is_full(self):
+        return len(self.players) == 5
+
+Action = namedtuple('Action', [])
