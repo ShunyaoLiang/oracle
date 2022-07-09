@@ -62,7 +62,11 @@ class Card(Enum):
         except ValueError:
             pass
 
+class Opcode(Enum):
+    START = auto()
+
 class Player:
+    id_: int
     role: Role
     hand: List[Card]
     sender: SimpleQueue
@@ -70,7 +74,8 @@ class Player:
 
     hand_limit = 5
 
-    def __init__(self, receiver):
+    def __init__(self, id_, receiver):
+        self.id_ = id_
         self.hand = list()
         self.sender = SimpleQueue()
         self.receiver = receiver
@@ -78,6 +83,14 @@ class Player:
     def draw(self, deck):
         while len(self.hand) < self.hand_limit:
             self.hand.append(deck.pop())
+
+    def send_start_event(self, the_crown_id):
+        self.send_event({
+            'op': Opcode.START.value,
+            'id': self.id_,
+            'role': self.role.value,
+            'the_crown_id': the_crown_id
+        })
 
     def send_event(self, event):
         self.sender.put(event)
@@ -98,7 +111,7 @@ class Game:
         receiver = sender
         if self.is_full:
             raise Exception('Tried to add a player to an ongoing game')
-        player = Player(receiver)
+        player = Player(len(self.players), receiver)
         self.players.append(player)
         # Start the game once five players have joined
         if self.is_full:
@@ -108,10 +121,14 @@ class Game:
 
     def run(self):
         self.assign_player_roles()
+        the_crown_id = next(player for player in self.players if player.role == Role.THE_CROWN).id_
+
         Card.shuffle_deck(self.deck)
-        # Draw initial hands.
         for player in self.players:
+            # Draw initial hands.
             player.draw(self.deck)
+            # Inform players of initial state.
+            player.send_start_event(the_crown_id)
 
     def assign_player_roles(self):
         roles = list(Role)
