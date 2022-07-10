@@ -1,8 +1,9 @@
 from flask import Flask, redirect, render_template, url_for
 from flask_sock import Sock
 from json import dumps, loads
-from oracle import Action, Game
-from queue import SimpleQueue
+
+from oracle.lobby import Lobby
+from oracle.bus import Action
 
 # Create our Flask application.
 app = Flask(__name__)
@@ -11,7 +12,7 @@ sock = Sock(app)
 
 # Eventually, we may support multiple games running at the same time. For now,
 # there is only one.
-game = Game()
+lobby = Lobby()
 
 @app.route('/game')
 def get_game():
@@ -21,8 +22,7 @@ def get_game():
 @sock.route('/game')
 def handle_connection(ws):
     # Once the game starts, we send our actions through a queue.
-    sender = SimpleQueue()
-    receiver = game.add_player_from_sender(sender)
+    sender, receiver = lobby.join()
 
     while True:
         # Serialise events to JSON before sending them over the connection.
