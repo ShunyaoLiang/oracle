@@ -1,3 +1,7 @@
-h1 {
-	font-family: sans-serif;
+.card {
+	height: 10em;
+}
+
+.turn {
+	background-color: coral;
 }
