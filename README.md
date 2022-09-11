@@ -13,11 +13,15 @@
 - [`static/`](`static`) contains CSS and JS files.
 
 To run the program, ensure you have
-[installed Flask](https://flask.palletsprojects.com/en/2.1.x/installation/) and
-clone this repository.
-Then, from within the repository run
+installed [Flask](https://flask.palletsprojects.com/en/2.1.x/installation/)
+and [flask-sock](https://flask-sock.readthedocs.io/en/latest/quickstart.html),
+then clone this repository.
+After, to start the application, run
 
 ```sh
-$ export FLASK_APP=oracle
 $ flask run
 ```
+
+(Yes, I know that that starts the Werkzeug development server!)
+
+Then, you can access the app at [localhost:5000](http://localhost:5000).
