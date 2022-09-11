@@ -1,7 +1,7 @@
 <div align="center">
 	<h1>Oracle</h1>
 	<p>
-		A digital version of the strategy card game
+		A proof-of-concept for a digital version of the strategy card game
 		<a href="https://oraclecardgame.com/">Oracle</a>! for the CSESoc
 		Personal Projects Competition.
 	</p>
@@ -24,4 +24,8 @@ $ flask run
 
 (Yes, I know that that starts the Werkzeug development server!)
 
-Then, you can access the app at [localhost:5000](http://localhost:5000).
+Then, you can access the app at [localhost:5000/app](http://localhost:5000/app)!
+
+Oracle Online is also hosted [here](https://thomasliang.pythonanywhere.com/app),
+but because the application depends on unsecured WebSockets, you may need to
+allow that in your browser settings before connecting.
