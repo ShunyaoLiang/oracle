@@ -1,5 +1,5 @@
 <div align="center">
-	<h1>Oracle</h1>
+	<h1>Oracle Online</h1>
 	<p>
 		A proof-of-concept for a digital version of the strategy card game
 		<a href="https://oraclecardgame.com/">Oracle</a>! for the CSESoc
