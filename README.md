@@ -29,3 +29,6 @@ Then, you can access the app at [localhost:5000/app](http://localhost:5000/app)!
 Oracle Online is also hosted [here](https://thomasliang.pythonanywhere.com/app),
 but because the application depends on unsecured WebSockets, you may need to
 allow that in your browser settings before connecting.
+
+There is also footage of the project uploaded to YouTube
+[here](https://youtu.be/5uL0M107Y8s)!
